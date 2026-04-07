@@ -1,0 +1,20 @@
+RTOS is short for Real Time Operating System. The RTOS kernel is a type of operating system that allows multiple endless background loops on a single CPU, including a blocking call to allow lower priority task to be called with the RTOS performing a context switch, the scheduler finds the next higher priority ready to run. 
+
+FreeRTOS is one example of a RTOS designed to run on micro controllers.
+
+With FreeRTOS we can create a multiple tasks as functions and ask the scheduler to run them. The tasks can be balanced through CPU cores with higher focus depending on priority.
+
+Task: Set of program instructions loaded in memory.
+
+Thread: unit of CPU utilisation with its own program counter and stack.
+
+Process: instance of a computer program. Will have one or more threads used to accomplish tasks. Threads can share heap memory and can pass resources.
+
+FreeRTOS calls threads tasks, as they do not support virtual memory.
+
+The Scheduler is the part of the kernel responsible for deciding which task should be executing at any time. The kernel can pause and later resume a task.
+
+The idle task is created when no task is available for execution. This task always runs on the lowest priority i.e. 0 priority.
+
+
+

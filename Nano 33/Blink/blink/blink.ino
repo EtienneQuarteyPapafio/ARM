@@ -1,4 +1,7 @@
-#include <Arduino_FreeRTOS.h> //Adds header file for FreeRTOS
+#include <FreeRTOS.h> //Adds header file for FreeRTOS
+#include <task.h>
+#include <semphr.h>
+#include <queue.h>
 
 void taskBlink1(void *pvParameters); 
 
@@ -71,7 +74,7 @@ void taskBlink1(void *pvParameters)
   while(1)
   {
   digitalWrite(8, HIGH);
-  vTaskDelay(200/portTick_PERIOD_MS);
+  vTaskDelay(200/portTICK_PERIOD_MS);
   digitalWrite(8, LOW);    
   vTaskDelay(200/portTICK_PERIOD_MS);
   }
@@ -83,7 +86,7 @@ void taskBlink2(void *pvParameters)
   while(1)
   {
   digitalWrite(9, HIGH);
-  vTaskDelay(300/portTick_PERIOD_MS);
+  vTaskDelay(300/portTICK_PERIOD_MS);
   digitalWrite(9, LOW);    
   vTaskDelay(300/portTICK_PERIOD_MS);
   }
