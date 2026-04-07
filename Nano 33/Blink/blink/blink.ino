@@ -1,4 +1,4 @@
-#include <FreeRTOS.h> //Adds header file for FreeRTOS
+#include <FreeRTOS.h> //Adds header files for FreeRTOS
 #include <task.h>
 #include <semphr.h>
 #include <queue.h>
