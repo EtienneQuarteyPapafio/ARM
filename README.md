@@ -1,1 +1,1 @@
-This is a test build of a blink project for the nano 33 iot. However the FreeRTOS library  is built for Arduino boards with AVR architecture whilst the Nano 33 ioT is a 32-bit arm cortex (SAMD21)
+This repository contains a test build of a blink project for a Arduino microcontroller Nano 33 ioT 32-bit arm cortex (SAMD21) it implements the FreeRTOS library. Future projects are designed to cover a wide range of practical applications and different functionalities utilising DSP.
