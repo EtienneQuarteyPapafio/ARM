@@ -24,12 +24,16 @@ unsigned long debounceDelay = 30;    // the debounce time; increase if the outpu
 void taskBlink(void *pvParameters); //function prototype for execution, takes arguments of the pointer pvParameters
 void taskTap(void *pvParameters);
 
+//Creating handles to be able to be referenced by other tasks
+
+TaskHandle_t Task_Handle1;
+
 void setup() {
   // put your setup code here, to run once:
 
 Serial.begin(9600); //Creates Serial communication
 
-xTaskCreate(taskBlink,"Task1",128,NULL,1,NULL);
+xTaskCreate(taskBlink,"Task1",128,NULL,1,&Task_Handle1);
 xTaskCreate(taskTap,"Task2",128,NULL,1,NULL);
 
 //After creating the task, start the scheduler in the void setup using the
@@ -67,13 +71,18 @@ void taskTap(void *pvParameters)
   if (reading == HIGH && lastButtonState==LOW) {
     // reset the debouncing timer
     
+    
    if ((millis() - lastDebounceTime) > debounceDelay) {
     // whatever the reading is at, it's been there for longer than the debounce
     // delay, so take it as the actual current state:
     lastDebounceTime = millis();
 
+    
+
     if (!waitingForSecondTap){
 
+    vTaskSuspend(Task_Handle1);
+    
     firstTap=millis(); //gets the current time
 
     waitingForSecondTap=1;
@@ -92,7 +101,7 @@ void taskTap(void *pvParameters)
 
     Serial.println("two");
 
-  
+    vTaskResume(Task_Handle1);
 
     }
    }
