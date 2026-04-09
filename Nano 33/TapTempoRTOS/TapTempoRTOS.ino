@@ -19,7 +19,7 @@ unsigned long secondTap=0; //Ms ofs second tap
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
-unsigned long debounceDelay = 50;    // the debounce time; increase if the output flickers
+unsigned long debounceDelay = 30;    // the debounce time; increase if the output flickers
 
 
 
@@ -62,50 +62,53 @@ void taskTap(void *pvParameters)
 {
   pinMode(10, INPUT);
   int reading;
-  //Serial.println(reading);
+  
   while(1)
   {
-  int reading = digitalRead(10);
+  reading = digitalRead(10);
+
+//  Serial.println("Reading");
+  //Serial.println(reading);
 
   // If the switch changed, due to noise or pressing:
-  if (reading != lastButtonState) {
+  if (reading == HIGH && lastButtonState==LOW) {
     // reset the debouncing timer
-    lastDebounceTime = millis();
     
-  }
-  
-  if ((millis() - lastDebounceTime) > debounceDelay) {
+   if ((millis() - lastDebounceTime) > debounceDelay) {
     // whatever the reading is at, it's been there for longer than the debounce
     // delay, so take it as the actual current state:
+    lastDebounceTime = millis();
 
-    // if the button state has changed:
-    if (reading != buttonState) {
-      buttonState = reading;
-      
-    }
-
-    if (reading==HIGH && !waitingForSecondTap){
+    if (!waitingForSecondTap){
 
     firstTap=millis(); //gets the current time
-    
+
     waitingForSecondTap=1;
 
+    Serial.println("one");
+
     }
-    
-    else if (reading==HIGH && waitingForSecondTap==1){
+
+    else{
 
     secondTap=millis(); //gets current time of second tap
 
     newMs=secondTap-firstTap;
-
-    lastDebounceTime=millis();
     
     waitingForSecondTap=false; //reset
+
+    Serial.println("two");
+
     }
+   }
   }
 
-  lastButtonState = reading;
-}
+  lastButtonState=reading;
+
+ }
+
+  
+
 };
 
 void taskPrint(void *pvParameters){
