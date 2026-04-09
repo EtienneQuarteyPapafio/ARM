@@ -21,11 +21,8 @@ unsigned long secondTap=0; //Ms ofs second tap
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
 unsigned long debounceDelay = 30;    // the debounce time; increase if the output flickers
 
-
-
 void taskBlink(void *pvParameters); //function prototype for execution, takes arguments of the pointer pvParameters
 void taskTap(void *pvParameters);
-void taskPrint(void *pvParameters);
 
 void setup() {
   // put your setup code here, to run once:
@@ -33,8 +30,7 @@ void setup() {
 Serial.begin(9600); //Creates Serial communication
 
 xTaskCreate(taskBlink,"Task1",128,NULL,1,NULL);
-xTaskCreate(taskPrint,"Task2",128,NULL,1,NULL);
-xTaskCreate(taskTap,"Task3",128,NULL,1,NULL);
+xTaskCreate(taskTap,"Task2",128,NULL,1,NULL);
 
 //After creating the task, start the scheduler in the void setup using the
 
@@ -52,9 +48,9 @@ void taskBlink(void *pvParameters)
   while(1)
   {
   digitalWrite(9, HIGH);
-  vTaskDelay(800/portTICK_PERIOD_MS);
+  vTaskDelay((newMs/2)/portTICK_PERIOD_MS);
   digitalWrite(9, LOW);    
-  vTaskDelay(800/portTICK_PERIOD_MS);
+  vTaskDelay((newMs/2)/portTICK_PERIOD_MS);
   }
 };
 
@@ -66,9 +62,6 @@ void taskTap(void *pvParameters)
   while(1)
   {
   reading = digitalRead(10);
-
-//  Serial.println("Reading");
-  //Serial.println(reading);
 
   // If the switch changed, due to noise or pressing:
   if (reading == HIGH && lastButtonState==LOW) {
@@ -99,6 +92,8 @@ void taskTap(void *pvParameters)
 
     Serial.println("two");
 
+  
+
     }
    }
   }
@@ -109,12 +104,4 @@ void taskTap(void *pvParameters)
 
   
 
-};
-
-void taskPrint(void *pvParameters){
-  while(1)
-  {
-   //Serial.println("Tap");
-  //vTaskDelay(800/portTICK_PERIOD_MS); 
-  }
 };
