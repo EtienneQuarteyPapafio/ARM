@@ -10,6 +10,11 @@
 //initial variables
 int buttonState; //current state of input pin
 int lastButtonState=LOW; //previous reading from the input pin
+bool waitingForSecondTap=false;
+
+unsigned long newMs=600; //Default Ms
+unsigned long firstTap=0; //Ms of first tap
+unsigned long secondTap=0; //Ms ofs second tap
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -57,6 +62,7 @@ void taskTap(void *pvParameters)
 {
   pinMode(10, INPUT);
   int reading;
+  //Serial.println(reading);
   while(1)
   {
   int reading = digitalRead(10);
@@ -77,6 +83,25 @@ void taskTap(void *pvParameters)
       buttonState = reading;
       
     }
+
+    if (reading==HIGH && !waitingForSecondTap){
+
+    firstTap=millis(); //gets the current time
+    
+    waitingForSecondTap=1;
+
+    }
+    
+    else if (reading==HIGH && waitingForSecondTap==1){
+
+    secondTap=millis(); //gets current time of second tap
+
+    newMs=secondTap-firstTap;
+
+    lastDebounceTime=millis();
+    
+    waitingForSecondTap=false; //reset
+    }
   }
 
   lastButtonState = reading;
@@ -86,7 +111,7 @@ void taskTap(void *pvParameters)
 void taskPrint(void *pvParameters){
   while(1)
   {
-   Serial.println("Tap");
-  vTaskDelay(1600/portTICK_PERIOD_MS); 
+   //Serial.println("Tap");
+  //vTaskDelay(800/portTICK_PERIOD_MS); 
   }
 };
