@@ -12,7 +12,7 @@ int buttonState; //current state of input pin
 int lastButtonState=LOW; //previous reading from the input pin
 bool waitingForSecondTap=false;
 
-unsigned long newMs=600; //Default Ms
+volatile unsigned long newMs=600; //Default Ms, volatile prevents compiler from optimization
 unsigned long firstTap=0; //Ms of first tap
 unsigned long secondTap=0; //Ms ofs second tap
 
@@ -112,5 +112,6 @@ void taskTap(void *pvParameters)
  }
 
   
+vTaskDelay(1 / portTICK_PERIOD_MS);
 
 };
